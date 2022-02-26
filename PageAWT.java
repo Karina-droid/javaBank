@@ -2,6 +2,7 @@ package bank;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.Stack;
 
 public class PageAWT extends Frame {
 	int x;
@@ -9,59 +10,94 @@ public class PageAWT extends Frame {
 	int margin;
 	int width;
 	int height;
-	Component[] frontComps;
-	Component[] loginComps;
-	Component[] registerComps;
 	
 	PageAWT(int x, int y, int margin, int width, int height) {
+		Stack<Component[]> actions = new Stack<Component[]>();
 		Button login = new Button("Login");
 		Button register = new Button("Sign up");
+		Button back = new Button("back");
+		back.setBounds(10, 40, 50, 25);
+		Component[] frontComps = {login, register};
+		actions.push(frontComps);
+		layoutPage(frontComps, back);
+		
 		login.setBounds(x, y, width, height);
 		register.setBounds(x, y + margin, width, height);
-		add(login);
-		add(register);
 		
 		Label username = new Label("Username");
 		TextField enterName = new TextField();
 		Label password = new Label("Password");
 		TextField enterPassword = new TextField();
-		Button submit = new Button("submit");
-		Component[] loginComps = {username, enterName, password, enterPassword, submit};
-		this.loginComps = loginComps;
+		Button logIn = new Button("Log in");
+		Component[] loginComps = {username, enterName, password, enterPassword, logIn};
+		username.setBounds(x, y, width, height);
+		enterName.setBounds(x, y + margin, width, height);
+		password.setBounds(x, y + 2*margin, width, height);
+		enterPassword.setBounds(x, y + 3*margin, width, height);
+		logIn.setBounds(80, y + 4*margin, 50, 25);
 
-		Label username1 = new Label("Username");
-		TextField enterName1 = new TextField();
-		Label password1 = new Label("Password");
-		TextField enterPassword1 = new TextField();
+		Label usernameR = new Label("Username");
+		TextField enterNameR = new TextField();
+		Label passwordR = new Label("Password");
+		TextField enterPasswordR = new TextField();
 		Label email = new Label("E-mail");
 		TextField enterEmail = new TextField();
-		Button submit1 = new Button("submit");
-		Component[] registerComps = {username1, enterName1, password1, enterPassword1, email, enterEmail, submit1};
-		this.registerComps = registerComps;
+		Button submitR = new Button("submit");
+		Component[] registerComps = {usernameR, enterNameR, passwordR, enterPasswordR, email, enterEmail, submitR};
+		
+		usernameR.setBounds(x, y, width, height);
+		enterNameR.setBounds(x, y + margin, width, height);
+		passwordR.setBounds(x, y + 2*margin, width, height);
+		enterPasswordR.setBounds(x, y + 3*margin, width, height);
+		email.setBounds(80, y + 4*margin, 50, 25);
+		enterEmail.setBounds(80, y + 5*margin, 50, 25);
+		logIn.setBounds(80, y + 6*margin, 50, 25);
 		
 		setSize(300, 400);
 		setLayout(null);
 		setVisible(true);
 		
+		back.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				if(actions.isEmpty()) layoutPage(frontComps, back);
+				else {
+					actions.pop();
+					layoutPage(actions.peek(), back);
+				}
+			}
+		});
+		
 		login.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removeAll();
-				for(int i=0; i<loginComps.length; i++) {
-					loginComps[i].setBounds(x, y + i*margin, width, height);
-					add(loginComps[i]);
-				}
+				actions.push(loginComps);
+				layoutPage(loginComps, back);
 			}
 		});
 		register.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				removeAll();
-				for(int i=0; i<registerComps.length; i++) {
-					registerComps[i].setBounds(x, y + i*margin, width, height);
-					add(registerComps[i]);
-				}
+				layoutPage(registerComps, back);
+				actions.push(registerComps);
 			}
 
 		});
+		submitR.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+		logIn.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				
+			}
+		});
+	}
+	
+	public void layoutPage(Component[] comps, Button back) {
+		removeAll();
+		add(back);
+		for(Component comp: comps) {
+			add(comp);
+		} 
 	}
 	
 	public static void main(String[] args) {
