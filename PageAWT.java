@@ -3,6 +3,7 @@ package bank;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.Stack;
+import bank.Bank;
 
 public class PageAWT extends Frame {
 	int x;
@@ -13,6 +14,9 @@ public class PageAWT extends Frame {
 	
 	PageAWT(int x, int y, int margin, int width, int height) {
 		Stack<Component[]> actions = new Stack<Component[]>();
+		Label wrong = new Label("Wrong username or password");
+		wrong.setForeground(Color.RED);
+		wrong.setBounds(100, 50, 2*width, height);
 		Button login = new Button("Login");
 		Button register = new Button("Sign up");
 		Button back = new Button("back");
@@ -49,9 +53,9 @@ public class PageAWT extends Frame {
 		enterNameR.setBounds(x, y + margin, width, height);
 		passwordR.setBounds(x, y + 2*margin, width, height);
 		enterPasswordR.setBounds(x, y + 3*margin, width, height);
-		email.setBounds(80, y + 4*margin, 50, 25);
-		enterEmail.setBounds(80, y + 5*margin, 50, 25);
-		logIn.setBounds(80, y + 6*margin, 50, 25);
+		email.setBounds(x, y + 4*margin, width, height);
+		enterEmail.setBounds(x, y + 5*margin, width, height);
+		submitR.setBounds(120, y + 6*margin, 50, 25);
 		
 		setSize(300, 400);
 		setLayout(null);
@@ -82,19 +86,21 @@ public class PageAWT extends Frame {
 		});
 		submitR.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				Bank.register(username.getText(), email.getText(), password.getText());
 			}
 		});
 		logIn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				
+				boolean enter = Bank.login(username.getText(), password.getText());
+				if(enter == true) System.out.println("Welcome, " + username.getText());
+				else add(wrong);
 			}
 		});
 	}
 	
-	public void layoutPage(Component[] comps, Button back) {
+	public void layoutPage(Component[] comps, Button b) {
 		removeAll();
-		add(back);
+		add(b);
 		for(Component comp: comps) {
 			add(comp);
 		} 

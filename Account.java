@@ -8,16 +8,14 @@ public class Account {
 	String email;
 	String password;
 	double balance;
-	double prev;
 	
-	Account(String username, String email, String password, double balance, double prev) {
+	Account(String username, String email, String password) {
 		username = this.username;
 		email = this.email;
 		password = this.password;
-		balance = this.balance;
-		prev = this.prev;
+		balance = 0;
 	}
-	
+
 	public static void main(String[] args) {
 		UserAWT menu = new UserAWT(100, 120, 40, 100, 40);
 	}
@@ -38,8 +36,7 @@ public class Account {
 		if(sum > this.balance) {
 			System.out.println("Your balance is not enough. To withdraw another sum - B, or choose any other option. \n");
 			return;
-		}this.prev = -sum;
-		this.balance -= sum;
+		}this.balance -= sum;
 	}
 	
 	
@@ -51,19 +48,11 @@ public class Account {
 			System.out.print("Enter a valid sum to deposit: ");
 			sum = scan.nextDouble();
 		}
-		this.prev = sum;
 		this.balance += sum;
 	}
 	
 	
 	void exit() {
 		System.out.println("Thank you for using our service!");
-	}
-
-	
-	void lastTransaction() {
-		if(this.prev == 0) System.out.println("You haven't made any transaction yet.");
-		else if(prev > 0) System.out.println("Deposited " + this.prev + " in the last transaction.");
-		else System.out.println("Withdrawn " + -this.prev + " in the last transaction.");
 	}
 }
